@@ -3,9 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Icon } from "../Icon";
 
-export function NewTripButton({ className = "btn btn--solid" }: { className?: string }) {
+export function NewTripButton({ className = "btn btn--fill" }: { className?: string }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -31,8 +30,7 @@ export function NewTripButton({ className = "btn btn--solid" }: { className?: st
   return (
     <>
       <button type="button" className={className} onClick={create} disabled={busy}>
-        <Icon name="plus" size={16} />
-        {busy ? "Criando…" : "Nova viagem"}
+        {busy ? "Criando…" : "+ Nova viagem"}
       </button>
       {error && (
         <span role="alert" className="form-error">
@@ -48,13 +46,12 @@ export function LogoutButton() {
   return (
     <button
       type="button"
-      className="btn btn--ghost"
+      className="btn btn--quiet"
       onClick={async () => {
         await createClient().auth.signOut();
         router.refresh();
       }}
     >
-      <Icon name="logout" size={16} />
       Sair
     </button>
   );

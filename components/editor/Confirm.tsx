@@ -23,14 +23,14 @@ export function Confirm({
 
   return (
     <div className="dialog-backdrop" onClick={onCancel}>
-      <div className="dialog paper" role="alertdialog" aria-modal="true" aria-labelledby="dlg-title" onClick={(e) => e.stopPropagation()}>
+      <div className="dialog" role="alertdialog" aria-modal="true" aria-labelledby="dlg-title" onClick={(e) => e.stopPropagation()}>
         <h3 id="dlg-title">{title}</h3>
         <p>{text}</p>
         <div className="row">
-          <button type="button" className="tbtn" onClick={onCancel} autoFocus>
+          <button type="button" className="btn btn--quiet" onClick={onCancel} autoFocus>
             Cancelar
           </button>
-          <button type="button" className="tbtn tbtn--accent" onClick={onConfirm}>
+          <button type="button" className="btn btn--fill" onClick={onConfirm}>
             {confirmLabel}
           </button>
         </div>

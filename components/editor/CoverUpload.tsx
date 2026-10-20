@@ -51,19 +51,16 @@ export function CoverUpload({ tripId, value, onChange }: { tripId: string; value
         <>
           <img src={value} alt="Capa da viagem" />
           <div className="cover-actions">
-            <button type="button" className="tbtn" onClick={() => input.current?.click()} disabled={busy}>
-              <Icon name="upload" size={16} />
+            <button type="button" className="btn btn--quiet" onClick={() => input.current?.click()} disabled={busy}>
               {busy ? "Enviando…" : "Trocar capa"}
             </button>
-            <button type="button" className="tbtn tbtn--icon tbtn--danger" onClick={() => onChange(null)} aria-label="Remover capa" title="Remover capa">
+            <button type="button" className="btn btn--quiet btn--danger" onClick={() => onChange(null)} aria-label="Remover capa" title="Remover capa">
               <Icon name="trash" size={16} />
             </button>
           </div>
         </>
       ) : (
         <span>
-          <Icon name="image" size={22} />
-          <br />
           {busy ? "Enviando capa…" : "Arraste uma foto de capa ou clique para escolher"}
         </span>
       )}

@@ -8,15 +8,9 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const { next } = await searchParams;
   const safeNext = next?.startsWith("/") && !next.startsWith("//") ? next : "/";
   return (
-    <div className="home login">
-      <div className="aurora" aria-hidden>
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-      </div>
-      <div className="login-card">
+    <div className="center">
+      <div className="sheet">
+        <span className="stamp">Diário / de viagem</span>
         <h1>Bem-vindo de volta</h1>
         <p>Entre para escrever e editar as viagens.</p>
         <LoginForm next={safeNext} />

@@ -2,12 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { tripSlug } from "@/lib/format";
-import type { Preset } from "@/lib/presets";
 import type { Section, Trip } from "@/lib/types";
-import { Scene } from "../scene/Scene";
 import { PresetPicker } from "../PresetPicker";
 import { Icon } from "../Icon";
 import { AutoTextarea } from "./AutoTextarea";
@@ -24,7 +22,6 @@ function Editor({ initialTrip, initialSections }: { initialTrip: Trip; initialSe
   const tracker = useSaveTracker();
   const [trip, setTrip] = useState(initialTrip);
   const [sections, setSections] = useState(initialSections);
-  const [wipe, setWipe] = useState<{ preset: Preset; x: number; y: number; key: number } | null>(null);
   const [confirm, setConfirm] = useState<Pending>(null);
 
   const { queue, flush } = useAutosave<Partial<Trip>>(`trip:${trip.id}`, async (patch) => {
@@ -39,30 +36,19 @@ function Editor({ initialTrip, initialSections }: { initialTrip: Trip; initialSe
     queue(patch);
   };
 
-  const changePreset = (preset: Preset, origin: { x: number; y: number }) => {
-    if (preset === trip.preset) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      edit({ preset });
-      return;
-    }
-    setWipe({ preset, ...origin, key: Date.now() });
-    setTimeout(() => edit({ preset }), 420);
-    setTimeout(() => setWipe(null), 950);
-  };
-
   const addSection = async () => {
     const position = sections.reduce((m, s) => Math.max(m, s.position), -1) + 1;
     const p = Promise.resolve(
       supabase
-      .from("sections")
-      .insert({ trip_id: trip.id, title: `Dia ${sections.length + 1}`, position })
-      .select("*")
-      .single(),
+        .from("sections")
+        .insert({ trip_id: trip.id, title: `Dia ${sections.length + 1}`, position })
+        .select("*")
+        .single(),
     ).then(({ data, error }) => {
-        if (error || !data) throw error;
-        setSections((list) => [...list, data as Section]);
-        requestAnimationFrame(() => document.querySelector(".chapters > .chapter:last-of-type")?.scrollIntoView({ behavior: "smooth", block: "center" }));
-      });
+      if (error || !data) throw error;
+      setSections((list) => [...list, data as Section]);
+      requestAnimationFrame(() => document.querySelector("main > .chapter:last-of-type")?.scrollIntoView({ behavior: "smooth", block: "center" }));
+    });
     await tracker.track("new-section", p);
   };
 
@@ -111,12 +97,10 @@ function Editor({ initialTrip, initialSections }: { initialTrip: Trip; initialSe
 
   return (
     <div className="trip editing" data-preset={trip.preset}>
-      <Scene preset={trip.preset} bursts={false} />
-
-      <header className="trip-bar">
+      <header className="bar">
         <div className="group">
-          <Link href="/" className="tbtn tbtn--icon" aria-label="Voltar para o início" title="Voltar para o início" onClick={flush}>
-            <Icon name="arrowLeft" size={16} />
+          <Link href="/" className="btn btn--quiet btn--icon" aria-label="Voltar para o início" title="Voltar para o início" onClick={flush}>
+            ←
           </Link>
           <SaveIndicator />
         </div>
@@ -125,81 +109,90 @@ function Editor({ initialTrip, initialSections }: { initialTrip: Trip; initialSe
             <input type="checkbox" checked={trip.published} onChange={(e) => edit({ published: e.target.checked })} />
             <span className="label-wide">{trip.published ? "Publicada" : "Rascunho"}</span>
           </label>
-          <Link href={`/viagem/${trip.slug}`} className="tbtn tbtn--accent" onClick={flush}>
-            <Icon name="eye" size={16} />
-            <span className="label-wide">Ver página</span>
+          <Link href={`/viagem/${trip.slug}`} className="btn btn--fill" onClick={flush}>
+            Ver página
           </Link>
         </div>
       </header>
 
-      <section className="trip-hero">
-        <PresetPicker value={trip.preset} onChange={changePreset} />
-        <input
-          className="hero-input trip-eyebrow"
-          value={trip.location}
-          placeholder="Onde? Ex.: Chapada Diamantina, BA"
-          aria-label="Local"
-          onChange={(e) => edit({ location: e.target.value })}
-        />
-        <AutoTextarea
-          className="hero-input trip-title"
-          value={trip.title}
-          placeholder="Nome da viagem"
-          aria-label="Título da viagem"
-          onChange={(title) => edit({ title })}
-        />
-        <AutoTextarea
-          className="hero-input trip-subtitle"
-          value={trip.subtitle}
-          placeholder="Uma frase que resuma a viagem…"
-          aria-label="Subtítulo"
-          onChange={(subtitle) => edit({ subtitle })}
-        />
-        <div className="date-row">
-          <label>
-            Ida
-            <input type="date" value={trip.start_date ?? ""} onChange={(e) => edit({ start_date: e.target.value || null })} />
-          </label>
-          <label>
-            Volta
-            <input type="date" value={trip.end_date ?? ""} min={trip.start_date ?? undefined} onChange={(e) => edit({ end_date: e.target.value || null })} />
-          </label>
+      <div className="wrap">
+        <div className="trip-layout">
+          <aside className="trip-aside">
+            <div className="meta">
+              <b>Visual</b>
+              <PresetPicker value={trip.preset} onChange={(preset) => edit({ preset })} />
+            </div>
+            <div className="meta">
+              <b>Local</b>
+              <input className="aside-input" value={trip.location} placeholder="Onde foi?" aria-label="Local" onChange={(e) => edit({ location: e.target.value })} />
+            </div>
+            <div className="meta">
+              <b>Ida</b>
+              <input className="aside-input" type="date" value={trip.start_date ?? ""} aria-label="Data de ida" onChange={(e) => edit({ start_date: e.target.value || null })} />
+            </div>
+            <div className="meta">
+              <b>Volta</b>
+              <input
+                className="aside-input"
+                type="date"
+                value={trip.end_date ?? ""}
+                min={trip.start_date ?? undefined}
+                aria-label="Data de volta"
+                onChange={(e) => edit({ end_date: e.target.value || null })}
+              />
+            </div>
+            {sections.length > 1 && (
+              <div className="toc-block">
+                <b>Capítulos</b>
+                <ol className="toc">
+                  {sections.map((s, i) => (
+                    <li key={s.id}>
+                      <a href={`#cap-${i + 1}`}>
+                        <span>{String(i + 1).padStart(2, "0")}</span>
+                        {s.title || "Sem título"}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </aside>
+
+          <main>
+            <AutoTextarea className="edit-field trip-title" value={trip.title} placeholder="Nome da viagem" aria-label="Título da viagem" onChange={(title) => edit({ title })} />
+            <AutoTextarea
+              className="edit-field trip-sub"
+              value={trip.subtitle}
+              placeholder="Uma frase que resuma a viagem…"
+              aria-label="Subtítulo"
+              onChange={(subtitle) => edit({ subtitle })}
+            />
+            <CoverUpload tripId={trip.id} value={trip.cover_url} onChange={(cover_url) => edit({ cover_url })} />
+
+            {sections.map((s, i) => (
+              <SectionEditor
+                key={s.id}
+                section={s}
+                index={i}
+                total={sections.length}
+                onTitle={(title) => setSections((list) => list.map((x) => (x.id === s.id ? { ...x, title } : x)))}
+                onMove={(dir) => moveSection(i, dir)}
+                onDelete={() => setConfirm({ kind: "section", id: s.id })}
+              />
+            ))}
+            <button type="button" className="add-chapter" onClick={() => void addSection()}>
+              <Icon name="plus" size={16} />
+              Novo capítulo
+            </button>
+
+            <div className="danger-zone">
+              <button type="button" className="btn btn--quiet btn--danger" onClick={() => setConfirm({ kind: "trip" })}>
+                Excluir viagem
+              </button>
+            </div>
+          </main>
         </div>
-        <CoverUpload tripId={trip.id} value={trip.cover_url} onChange={(cover_url) => edit({ cover_url })} />
-      </section>
-
-      <div className="chapters">
-        {sections.map((s, i) => (
-          <SectionEditor
-            key={s.id}
-            section={s}
-            index={i}
-            total={sections.length}
-            onMove={(dir) => moveSection(i, dir)}
-            onDelete={() => setConfirm({ kind: "section", id: s.id })}
-          />
-        ))}
-        <button type="button" className="add-chapter" onClick={() => void addSection()}>
-          <Icon name="plus" />
-          Novo capítulo
-        </button>
       </div>
-
-      <div className="danger-zone">
-        <button type="button" className="tbtn" onClick={() => setConfirm({ kind: "trip" })}>
-          <Icon name="trash" size={16} />
-          Excluir viagem
-        </button>
-      </div>
-
-      {wipe && (
-        <div
-          key={wipe.key}
-          className="wipe"
-          data-preset={wipe.preset}
-          style={{ "--wx": `${wipe.x}px`, "--wy": `${wipe.y}px` } as CSSProperties}
-        />
-      )}
 
       {confirm?.kind === "section" && (
         <Confirm

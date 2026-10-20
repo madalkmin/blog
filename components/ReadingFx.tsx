@@ -18,7 +18,7 @@ export function ReadingFx() {
     document.querySelectorAll(".reveal:not(.is-in)").forEach((el) => io.observe(el));
 
     const bar = document.querySelector<HTMLElement>(".progress");
-    const top = document.querySelector<HTMLElement>(".trip-bar");
+    const top = document.querySelector<HTMLElement>(".bar");
     const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".toc a"));
     const chapters = links.map((a) => document.getElementById(a.hash.slice(1)));
 

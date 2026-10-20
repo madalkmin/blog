@@ -1,45 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Caveat,
-  Cinzel,
-  Crimson_Pro,
-  Fraunces,
-  Instrument_Serif,
-  Inter,
-  JetBrains_Mono,
-  Lora,
-  Nunito,
-  Oswald,
-  Source_Serif_4,
-  Space_Grotesk,
-} from "next/font/google";
+import { Cinzel, Cormorant_Garamond, DM_Serif_Display, Fraunces, IBM_Plex_Mono, Newsreader, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import "./themes.css";
 
-const instrument = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--f-instrument" });
-const inter = Inter({ subsets: ["latin"], variable: "--f-inter" });
-const fraunces = Fraunces({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-fraunces", style: ["normal", "italic"] });
-const lora = Lora({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-lora", style: ["normal", "italic"] });
-const oswald = Oswald({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-oswald" });
-const sourceSerif = Source_Serif_4({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-source-serif", style: ["normal", "italic"] });
-const caveat = Caveat({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-caveat" });
-const nunito = Nunito({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-nunito", style: ["normal", "italic"] });
+const serif = Newsreader({ subsets: ["latin"], style: ["normal", "italic"], variable: "--f-serif" });
+const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--f-mono" });
+// Fontes de título dos presets: carregadas só quando usadas
+const fraunces = Fraunces({ subsets: ["latin"], preload: false, display: "swap", style: ["normal", "italic"], variable: "--f-fraunces" });
+const cormorant = Cormorant_Garamond({ subsets: ["latin"], preload: false, display: "swap", weight: ["500", "600"], variable: "--f-cormorant" });
+const dmSerif = DM_Serif_Display({ subsets: ["latin"], preload: false, display: "swap", weight: "400", style: ["normal", "italic"], variable: "--f-dmserif" });
 const cinzel = Cinzel({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-cinzel" });
-const crimson = Crimson_Pro({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-crimson", style: ["normal", "italic"] });
 const grotesk = Space_Grotesk({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-grotesk" });
-const mono = JetBrains_Mono({ subsets: ["latin"], preload: false, display: "swap", variable: "--f-mono" });
 
-const fonts = [instrument, inter, fraunces, lora, oswald, sourceSerif, caveat, nunito, cinzel, crimson, grotesk, mono]
-  .map((f) => f.variable)
-  .join(" ");
+const fonts = [serif, mono, fraunces, cormorant, dmSerif, cinzel, grotesk].map((f) => f.variable).join(" ");
 
 export const metadata: Metadata = {
   title: { default: "Diário de Viagem", template: "%s · Diário de Viagem" },
-  description: "Histórias, fotos e lembranças de cada viagem.",
+  description: "Anotações, fotos e lembranças de cada viagem.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0e0d0b",
+  themeColor: "#efe7da",
   width: "device-width",
   initialScale: 1,
 };

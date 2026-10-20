@@ -17,11 +17,12 @@ type Props = {
   section: Section;
   index: number;
   total: number;
+  onTitle: (title: string) => void;
   onMove: (dir: -1 | 1) => void;
   onDelete: () => void;
 };
 
-export function SectionEditor({ section, index, total, onMove, onDelete }: Props) {
+export function SectionEditor({ section, index, total, onTitle, onMove, onDelete }: Props) {
   const supabase = createClient();
   const [title, setTitle] = useState(section.title);
   const [uploading, setUploading] = useState(0);
@@ -89,7 +90,7 @@ export function SectionEditor({ section, index, total, onMove, onDelete }: Props
   editorRef.current = editor;
 
   return (
-    <section className="chapter paper">
+    <section className="chapter" id={`cap-${index + 1}`}>
       <div className="chapter-head">
         <span className="chapter-num">Capítulo {String(index + 1).padStart(2, "0")}</span>
         <div className="chapter-tools">
@@ -105,12 +106,13 @@ export function SectionEditor({ section, index, total, onMove, onDelete }: Props
         </div>
       </div>
       <AutoTextarea
-        className="chapter-title chapter-title-input"
+        className="edit-field chapter-title"
         value={title}
         placeholder="Título do capítulo"
         aria-label="Título do capítulo"
         onChange={(v) => {
           setTitle(v);
+          onTitle(v);
           queue({ title: v });
         }}
       />

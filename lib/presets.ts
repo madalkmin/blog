@@ -2,12 +2,13 @@ export const PRESETS = ["floresta", "montanha", "praia", "deserto", "cidade"] as
 
 export type Preset = (typeof PRESETS)[number];
 
-export const PRESET_INFO: Record<Preset, { label: string; emoji: string; tagline: string }> = {
-  floresta: { label: "Floresta", emoji: "🌲", tagline: "Musgo, vaga-lumes e folhas ao vento" },
-  montanha: { label: "Montanha", emoji: "🏔️", tagline: "Neblina, neve e picos ao amanhecer" },
-  praia: { label: "Praia", emoji: "🏖️", tagline: "Ondas, sol e brilho no mar" },
-  deserto: { label: "Deserto", emoji: "🏜️", tagline: "Dunas, calor e areia no ar" },
-  cidade: { label: "Cidade", emoji: "🌃", tagline: "Neon, chuva e janelas acesas" },
+// Cada preset muda a fonte dos títulos e a cor dos detalhes (molduras, capitulares, notas)
+export const PRESET_INFO: Record<Preset, { label: string; tagline: string }> = {
+  floresta: { label: "Floresta", tagline: "Fraunces itálico · musgo" },
+  montanha: { label: "Montanha", tagline: "Cormorant · ardósia" },
+  praia: { label: "Praia", tagline: "DM Serif · verde-mar" },
+  deserto: { label: "Deserto", tagline: "Cinzel · terracota" },
+  cidade: { label: "Cidade", tagline: "Space Grotesk · grafite" },
 };
 
 export function isPreset(value: unknown): value is Preset {
