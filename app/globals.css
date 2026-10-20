@@ -207,16 +207,78 @@ button {
   gap: 12px;
 }
 
-.brand-mark {
-  width: 34px;
-  height: 34px;
-  flex: none;
+/* Carimbo de entrada: borda dupla, selo "dv" e nome */
+.brand-stamp {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 16px 7px 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 10px;
   color: var(--ink);
-  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: rotate(-1.5deg);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.brand:hover .brand-mark {
-  transform: rotate(-14deg) scale(1.06);
+.brand-stamp::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--ink);
+  border-radius: 7px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.brand:hover .brand-stamp {
+  transform: rotate(0) scale(1.03);
+}
+
+.brand:active .brand-stamp {
+  transform: rotate(0) scale(0.97);
+}
+
+.brand-stamp-mark {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  transition: transform 0.8s var(--ease);
+}
+
+.brand:hover .brand-stamp-mark {
+  transform: rotate(-20deg);
+}
+
+.brand-stamp-text {
+  display: grid;
+  gap: 5px;
+  padding-left: 12px;
+  border-left: 1px dashed var(--line);
+}
+
+.brand-stamp-name {
+  font: 500 13px/1 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.brand-stamp-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: 400 9px/1 var(--mono);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.brand-stamp-sub::before,
+.brand-stamp-sub::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
 }
 
 .logo {
@@ -511,8 +573,28 @@ button {
     padding-top: 40px;
   }
 
-  .brand-text {
-    display: none;
+  .brand-stamp {
+    padding: 6px 12px 6px 6px;
+    gap: 8px;
+  }
+
+  .brand-stamp-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-stamp-text {
+    padding-left: 8px;
+  }
+
+  .brand-stamp-name {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .brand-stamp-sub {
+    font-size: 8px;
+    letter-spacing: 0.16em;
   }
 
   .nav .btn:not(.btn--fill) {

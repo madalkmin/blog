@@ -7,7 +7,7 @@ import { PRESET_INFO } from "@/lib/presets";
 import { renderContent } from "@/lib/render";
 import type { Section, Trip } from "@/lib/types";
 import { ReadingFx } from "@/components/ReadingFx";
-import { Logo } from "@/components/Logo";
+import { BrandStamp, Logo } from "@/components/Logo";
 
 export const dynamic = "force-dynamic";
 
@@ -46,11 +46,8 @@ export default async function TripPage({ params }: Props) {
             ← <span className="label-wide">Todas as viagens</span>
           </Link>
         </div>
-        <Link href="/" className="brand">
-          <Logo variant="mini" className="brand-mark" title="" />
-          <span className="label-wide">
-            Diário <b>/</b> de viagem
-          </span>
+        <Link href="/" className="brand" aria-label="Diário de Viagem — início">
+          <BrandStamp />
         </Link>
         <div className="group">
           {isAdmin ? (
