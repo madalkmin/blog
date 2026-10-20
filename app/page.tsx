@@ -5,6 +5,7 @@ import type { Trip } from "@/lib/types";
 import { TripCard } from "@/components/home/TripCard";
 import { LogoutButton, NewTripButton } from "@/components/home/AdminActions";
 import { ReadingFx } from "@/components/ReadingFx";
+import { Logo } from "@/components/Logo";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +34,10 @@ export default async function Home() {
     <>
       <header className="wrap nav">
         <Link href="/" className="brand">
-          Diário <b>/</b> de viagem
+          <Logo variant="mini" className="brand-mark" title="" />
+          <span className="brand-text">
+            Diário <b>/</b> de viagem
+          </span>
         </Link>
         <nav>
           {isAdmin && <NewTripButton />}
@@ -86,6 +90,7 @@ export default async function Home() {
       </main>
 
       <footer className="wrap foot">
+        <Logo id="stamp-foot" className="foot-stamp" />
         <span>Diário / de viagem</span>
         <span>Escrito na estrada</span>
       </footer>

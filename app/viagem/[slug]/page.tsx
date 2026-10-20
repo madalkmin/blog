@@ -7,6 +7,7 @@ import { PRESET_INFO } from "@/lib/presets";
 import { renderContent } from "@/lib/render";
 import type { Section, Trip } from "@/lib/types";
 import { ReadingFx } from "@/components/ReadingFx";
+import { Logo } from "@/components/Logo";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,10 @@ export default async function TripPage({ params }: Props) {
           </Link>
         </div>
         <Link href="/" className="brand">
-          Diário <b>/</b> de viagem
+          <Logo variant="mini" className="brand-mark" title="" />
+          <span className="label-wide">
+            Diário <b>/</b> de viagem
+          </span>
         </Link>
         <div className="group">
           {isAdmin ? (
@@ -120,6 +124,9 @@ export default async function TripPage({ params }: Props) {
             ))}
             {sections.length === 0 && <p className="empty-trip">Esta viagem ainda não tem capítulos.</p>}
 
+            <div className="trip-stamp reveal" aria-hidden>
+              <Logo id="stamp-end" />
+            </div>
             <footer className="trip-end">
               <Link href="/" className="btn btn--fill">
                 Outras viagens <span className="arrow">→</span>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LoginForm } from "./LoginForm";
+import { Logo } from "@/components/Logo";
 
 export const metadata: Metadata = { title: "Entrar" };
 
@@ -10,7 +11,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   return (
     <div className="center">
       <div className="sheet">
-        <span className="stamp">Diário / de viagem</span>
+        <Logo id="stamp-login" className="sheet-stamp" />
         <h1>Bem-vindo de volta</h1>
         <p>Entre para escrever e editar as viagens.</p>
         <LoginForm next={safeNext} />

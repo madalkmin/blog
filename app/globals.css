@@ -201,6 +201,53 @@ button {
   white-space: nowrap;
 }
 
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  color: var(--ink);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.brand:hover .brand-mark {
+  transform: rotate(-14deg) scale(1.06);
+}
+
+.logo {
+  display: block;
+}
+
+.foot-stamp,
+.sheet-stamp {
+  color: var(--ink);
+  transition: transform 1.2s var(--ease);
+}
+
+.foot-stamp {
+  width: 96px;
+  height: 96px;
+  flex-basis: 100%;
+  max-width: 96px;
+  margin-bottom: 8px;
+}
+
+.foot-stamp:hover,
+.sheet-stamp:hover {
+  transform: rotate(-30deg);
+}
+
+.sheet-stamp {
+  width: 84px;
+  height: 84px;
+  margin-bottom: 4px;
+}
+
 .brand b {
   color: var(--brown);
   font-weight: 500;
@@ -358,6 +405,7 @@ button {
 
 .foot {
   display: flex;
+  align-items: flex-end;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
@@ -461,6 +509,10 @@ button {
     grid-template-columns: 1fr;
     gap: 24px;
     padding-top: 40px;
+  }
+
+  .brand-text {
+    display: none;
   }
 
   .nav .btn:not(.btn--fill) {
