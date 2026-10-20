@@ -1,0 +1,56 @@
+name: Deploy
+
+# Todo push na main publica em produção; pull requests ganham um link de preview.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+  VERCEL_ENV: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Checar tipos
+        run: npx tsc --noEmit
+
+      # Aplica migrations novas do banco (só se o secret DATABASE_URL existir)
+      - name: Migrations do Supabase
+        if: github.event_name != 'pull_request' && env.DATABASE_URL != ''
+        run: npm run db:migrate
+
+      - name: Instalar Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Baixar configuração do Vercel
+        run: vercel pull --yes --environment=$VERCEL_ENV --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build
+        run: vercel build ${{ env.VERCEL_ENV == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt ${{ env.VERCEL_ENV == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "### 🚀 Publicado: $url" >> "$GITHUB_STEP_SUMMARY"
