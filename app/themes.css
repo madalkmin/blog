@@ -831,14 +831,26 @@
 }
 
 .prose blockquote {
-  margin: 1.6em 0;
-  padding: 0.2em 0 0.2em 1.2em;
-  border-left: 3px solid var(--accent);
+  position: relative;
+  margin: 1.8em 0;
+  padding: 0.2em 0 0.2em 1.6em;
   font-family: var(--display);
   font-style: italic;
   font-size: 1.25em;
   line-height: 1.5;
   color: var(--ink);
+}
+
+.prose blockquote::before {
+  content: "\201C";
+  position: absolute;
+  left: -0.05em;
+  top: -0.25em;
+  font-size: 3em;
+  line-height: 1;
+  font-style: normal;
+  color: var(--accent);
+  opacity: 0.85;
 }
 
 .prose ul,
